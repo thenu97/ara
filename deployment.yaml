@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ara
+  namespace: test
+  labels:
+    app: ara
+    component: api
+spec:
+  selector:
+    matchLabels:
+      app: ara
+      component: api
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+        kubectl.kubernetes.io/default-container: app
+      labels:
+        app: ara
+        component: api
+    spec:
+      containers:
+        - name: app
+          ports:
+            - containerPort: 8000
+          image: docker.io/recordsansible/ara-api:latest
+          securityContext:
+            runAsGroup: 0
+            runAsUser: 0
+          volumeMounts:
+            - name: ara-config-storage
+              mountPath: /opt/ara
+            - name: ara-config-volume
+              mountPath: /opt/ara/settings.yaml
+              subPath: settings.yaml
+      volumes:
+        - name: ara-config-volume
+          configMap:
+            defaultMode: 0777
+            name: ara
+        - name: ara-config-storage
+          emptyDir: {}
+      serviceAccountName: ara

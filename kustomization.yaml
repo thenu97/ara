@@ -1,0 +1,13 @@
+---
+resources:
+  - namespace.yaml
+  - service.yaml
+  - deployment.yaml
+  - serviceaccount.yaml
+
+namespace: test
+
+configMapGenerator:
+  - name: ara
+    files:
+      - config/settings.yaml

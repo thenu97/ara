@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ara
+  name: ara
+  namespace: test
+spec:
+  ports:
+    - name: http
+      port: 8000
+      protocol: TCP
+  selector:
+    app: ara
+  sessionAffinity: None
+  type: ClusterIP
+
